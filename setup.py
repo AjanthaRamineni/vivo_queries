@@ -1,7 +1,7 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(name= 'vivo_queries',
-      packages = ['vivo_queries'],
+      packages = find_packages(),
       version= '0.1',
       description= 'A collection of queries and tools for interacting with VIVO',
       author= 'Naomi Braun',

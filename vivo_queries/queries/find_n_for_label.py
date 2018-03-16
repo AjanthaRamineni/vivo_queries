@@ -19,6 +19,14 @@ def fill_params(connection, **params):
         params['identity'] = 'http://xmlns.com/foaf/0.1/Person'
     elif params['Thing'].type == 'publisher':
         params['identity'] = 'http://vivoweb.org/ontology/core#Publisher'
+    elif params['Thing'].type == 'grant':
+        params['identity'] = 'http://vivoweb.org/ontology/core#Grant'
+    elif params['Thing'].type == 'department':
+        params['identity'] = 'http://vivoweb.org/ontology/core#Department'
+    elif params['Thing'].type == 'contributor':
+        params['identity'] = 'http://vivoweb.org/ontology/core#CoPrincipalInvestigatorRole'
+    elif params['Thing'].type == 'organization':
+        params['identity'] = 'http://xmlns.com/foaf/0.1/Organization'
     else:
         params['identity'] = 'http://www.w3.org/2002/07/owl#Thing'
 

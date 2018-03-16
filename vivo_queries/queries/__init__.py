@@ -19,10 +19,17 @@ import get_journal_on_pub
 import get_label
 import get_person_list
 import get_vcard
+import get_contributor_list
+import get_department_list
+import get_grant_list
 import make_academic_article
 import make_editorial_article
 import make_journal
 import make_letter
 import make_person
 import make_publisher
+import make_contributor
+import make_department
+import make_grant
+import make_organization
 import merge_entities
