@@ -20,6 +20,10 @@ def get_params(connection):
 
 
 def run(connection, **params):
+
+    if params['Grant'].n_number:
+        return
+
     params['Grant'].create_n()
     params['upload_url'] = connection.vivo_url
 

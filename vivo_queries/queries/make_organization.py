@@ -10,6 +10,10 @@ def get_params(connection):
 
 
 def run(connection, **params):
+
+    if params['Organization'].n_number:
+        return
+
     params['upload_url'] = connection.vivo_url
 
     params['Organization'].n_number = connection.gen_n()
