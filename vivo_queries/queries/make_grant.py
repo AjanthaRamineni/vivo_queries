@@ -10,11 +10,12 @@ from vivo_queries.vdos.organization import Organization
 def get_params(connection):
     grant = Grant(connection)
     article = Article(connection)
-    contributor = Contributor(connection)
+    pi_contributor = Contributor(connection)
+    copi_contributor = Contributor(connection)
     a_department = Department(connection)
     s_department = Department(connection)
     organization = Organization(connection)
-    params = {'Grant': grant, 'SupportedWork': article, 'Contributor': contributor, 'AwardingDepartment': a_department,
+    params = {'Grant': grant, 'SupportedWork': article, 'Contributor_PI': pi_contributor, 'Contributor_CoPI': copi_contributor, 'AwardingDepartment': a_department,
               'SubContractedThrough': s_department, 'AdministeredBy': organization}
     return params
 
@@ -137,13 +138,21 @@ def run(connection, **params):
                       <{{upload_url}}{{Grant.n_number}}> <http://vivoweb.org/ontology/core#localAwardId> "{{Grant.direct_award_id}}" .
                 {%- endif -%}
                 
-                {%- if Contributor.name %}
-                    <{{upload_url}}{{Contributor.n_number}}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <{{Contributor.type}}> .
-                    <{{upload_url}}{{Contributor.n_number}}> <http://purl.obolibrary.org/obo/RO_0000052> <{{upload_url}}{{Contributor.person_id}}> .
-                    <{{upload_url}}{{Grant.n_number}}> <http://vivoweb.org/ontology/core#relates> <{{upload_url}}{{Contributor.person_id}}> .
-                    <{{upload_url}}{{Grant.n_number}}> <http://vivoweb.org/ontology/core#relates> <{{upload_url}}{{Contributor.n_number}}> .
-                    <{{upload_url}}{{Contributor.n_number}}> <http://vivoweb.org/ontology/core#relatedBy> <{{upload_url}}{{Grant.n_number}}> .
-                {%- endif -%} 
+                {%- if Contributor_PI.name %}
+                    <{{upload_url}}{{Contributor_PI.n_number}}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <{{Contributor_PI.type}}> .
+                    <{{upload_url}}{{Contributor_PI.n_number}}> <http://purl.obolibrary.org/obo/RO_0000052> <{{upload_url}}{{Contributor_PI.person_id}}> .
+                    <{{upload_url}}{{Grant.n_number}}> <http://vivoweb.org/ontology/core#relates> <{{upload_url}}{{Contributor_PI.person_id}}> .
+                    <{{upload_url}}{{Grant.n_number}}> <http://vivoweb.org/ontology/core#relates> <{{upload_url}}{{Contributor_PI.n_number}}> .
+                    <{{upload_url}}{{Contributor_PI.n_number}}> <http://vivoweb.org/ontology/core#relatedBy> <{{upload_url}}{{Grant.n_number}}> .
+                {%- endif -%}
+                
+                {%- if Contributor_CoPI.name %}
+                    <{{upload_url}}{{Contributor_CoPI.n_number}}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <{{Contributor_CoPI.type}}> .
+                    <{{upload_url}}{{Contributor_CoPI.n_number}}> <http://purl.obolibrary.org/obo/RO_0000052> <{{upload_url}}{{Contributor_CoPI.person_id}}> .
+                    <{{upload_url}}{{Grant.n_number}}> <http://vivoweb.org/ontology/core#relates> <{{upload_url}}{{Contributor_CoPI.person_id}}> .
+                    <{{upload_url}}{{Grant.n_number}}> <http://vivoweb.org/ontology/core#relates> <{{upload_url}}{{Contributor_CoPI.n_number}}> .
+                    <{{upload_url}}{{Contributor_CoPI.n_number}}> <http://vivoweb.org/ontology/core#relatedBy> <{{upload_url}}{{Grant.n_number}}> .
+                {%- endif -%}
                 
                 {%- if SupportedWork.name %}
                     <{{upload_url}}{{Grant.n_number}}>	<http://vivoweb.org/ontology/core#supportedInformationResource> <{{SupportedWork.n_number}}> .

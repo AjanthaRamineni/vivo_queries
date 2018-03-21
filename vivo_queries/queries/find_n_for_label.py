@@ -23,8 +23,10 @@ def fill_params(connection, **params):
         params['identity'] = 'http://vivoweb.org/ontology/core#Grant'
     elif params['Thing'].type == 'department':
         params['identity'] = 'http://vivoweb.org/ontology/core#Department'
-    elif params['Thing'].type == 'contributor':
+    elif params['Thing'].type == 'contributor_copi':
         params['identity'] = 'http://vivoweb.org/ontology/core#CoPrincipalInvestigatorRole'
+    elif params['Thing'].type == 'contributor_pi':
+        params['identity'] = 'http://vivoweb.org/ontology/core#PrincipalInvestigatorRole'
     elif params['Thing'].type == 'organization':
         params['identity'] = 'http://xmlns.com/foaf/0.1/Organization'
     else:
