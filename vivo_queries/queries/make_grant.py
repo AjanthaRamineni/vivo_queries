@@ -2,7 +2,6 @@ from jinja2 import Environment
 
 from vivo_queries.vdos.article import Article
 from vivo_queries.vdos.contributor import Contributor
-from vivo_queries.vdos.department import Department
 from vivo_queries.vdos.grant import Grant
 from vivo_queries.vdos.organization import Organization
 
@@ -12,8 +11,8 @@ def get_params(connection):
     article = Article(connection)
     pi_contributor = Contributor(connection)
     copi_contributor = Contributor(connection)
-    a_department = Department(connection)
-    s_department = Department(connection)
+    a_department = Organization(connection)
+    s_department = Organization(connection)
     organization = Organization(connection)
     params = {'Grant': grant, 'SupportedWork': article, 'Contributor_PI': pi_contributor, 'Contributor_CoPI': copi_contributor, 'AwardingDepartment': a_department,
               'SubContractedThrough': s_department, 'AdministeredBy': organization}
