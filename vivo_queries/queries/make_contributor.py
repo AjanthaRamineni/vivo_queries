@@ -10,9 +10,7 @@ def get_params(connection):
     params = {'Contributor': contributor, 'Author': author}
     return params
 
-
-def run(connection, **params):
-
+def fill_params(connection, **params):
     params['upload_url'] = connection.vivo_url
 
     params['Contributor'].n_number = connection.gen_n()
@@ -25,22 +23,29 @@ def run(connection, **params):
     params['Contributor'].type = contributor_role_type
     params['Contributor'].person_id = params['Author'].n_number
 
-    # template data into q
-    q = Environment().from_string("""\
-        INSERT DATA {
-            GRAPH <http://vitro.mannlib.cornell.edu/default/vitro-kb-2> 
-            {
-                
-                {%- if Contributor.name %}
-                    <{{upload_url}}{{Author.n_number}}> <http://www.w3.org/2000/01/rdf-schema#label> "{{Contributor.name}}"^^<http://www.w3.org/2001/XMLSchema#string> .
-                    <{{upload_url}}{{Contributor.n_number}}> <http://purl.obolibrary.org/obo/ARG_2000028> <{{upload_url}}{{Author.vcard}}> .
-                    <{{upload_url}}{{Contributor.n_number}}> <http://purl.obolibrary.org/obo/RO_0000053> <{{upload_url}}{{Author.name_id}}> . 
-                {%- endif -%}
-            }
-        
-        }
-        """)
+def get_triples():
+    triples = """\
+        {%- if Contributor.name %}
+            <{{upload_url}}{{Author.n_number}}> <http://www.w3.org/2000/01/rdf-schema#label> "{{Contributor.name}}"^^<http://www.w3.org/2001/XMLSchema#string> .
+            <{{upload_url}}{{Contributor.n_number}}> <http://purl.obolibrary.org/obo/ARG_2000028> <{{upload_url}}{{Author.vcard}}> .
+            <{{upload_url}}{{Contributor.n_number}}> <http://purl.obolibrary.org/obo/RO_0000053> <{{upload_url}}{{Author.name_id}}> .
+        {%- endif -%}
+    """
 
+    api_trip = """\
+    INSERT DATA {
+        GRAPH <http://vitro.mannlib.cornell.edu/default/vitro-kb-2>
+        {{
+            {TRIPS}
+        }}
+    }
+        """.format(TRIPS=triples)
+    trips = Environment().from_string(api_trip)
+    return trips
+
+def run(connection, **params):
+    params = fill_params(connection, **params)
+    q = get_triples()
     # send data to vivo
     print('=' * 20 + "\nAdding contributor\n" + '=' * 20)
     response = connection.run_update(q.render(**params))

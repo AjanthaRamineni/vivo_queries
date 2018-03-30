@@ -8,9 +8,7 @@ def get_params(connection):
     params = {'Department': department}
     return params
 
-
-def run(connection, **params):
-
+def fill_params(connection, **params):
     if params['Department'].n_number:
         return
 
@@ -21,18 +19,28 @@ def run(connection, **params):
     department_type = department_uri[params['Department'].dep_type]
     params['Department'].dep_type = department_type
 
-    # template data into q
-    q = Environment().from_string("""\
+def get_triples():
+    triples = """\
+        <{{upload_url}}{{Department.n_number}}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
+        <{{upload_url}}{{Department.n_number}}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <{{Department.dep_type}}> .
+        <{{upload_url}}{{Department.n_number}}> <http://www.w3.org/2000/01/rdf-schema#label>	"{{Department.name}}" .
+    """
+
+    api_trip = """\
     INSERT DATA {
         GRAPH <http://vitro.mannlib.cornell.edu/default/vitro-kb-2>
-        {
-                <{{upload_url}}{{Department.n_number}}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Thing> .
-                <{{upload_url}}{{Department.n_number}}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <{{Department.dep_type}}> .
-                <{{upload_url}}{{Department.n_number}}> <http://www.w3.org/2000/01/rdf-schema#label>	"{{Department.name}}" .       
-        }
+        {{
+            {TRIPS}
+        }}
     }
-    """)
+        """.format(TRIPS=triples)
+    trips = Environment().from_string(api_trip)
+    return trips
 
+def run(connection, **params):
+
+    fill_params(connection, **params)
+    q = get_triples()
     # Send data to Vivo
     print('=' * 20 + "\nCreating new department\n" + '=' * 20)
     response = connection.run_update(q.render(**params))
