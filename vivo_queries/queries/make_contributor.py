@@ -23,6 +23,8 @@ def fill_params(connection, **params):
     params['Contributor'].type = contributor_role_type
     params['Contributor'].person_id = params['Author'].n_number
 
+    return params
+
 def get_triples():
     triples = """\
         {%- if Contributor.name %}
@@ -33,12 +35,12 @@ def get_triples():
     """
 
     api_trip = """\
-    INSERT DATA {
+    INSERT DATA {{
         GRAPH <http://vitro.mannlib.cornell.edu/default/vitro-kb-2>
         {{
             {TRIPS}
         }}
-    }
+    }}
         """.format(TRIPS=triples)
     trips = Environment().from_string(api_trip)
     return trips

@@ -55,17 +55,17 @@ def q1_get_triples():
         {%- endif -%}
     """
     api_trip = """\
-    INSERT DATA {
+    INSERT DATA {{
         GRAPH <http://vitro.mannlib.cornell.edu/default/vitro-kb-2>
         {{
             {TRIPS}
         }}
-    }
+    }}
         """.format(TRIPS=triples)
     trips = Environment().from_string(api_trip)
     return trips
 
-def q2_get_triples(connection, **params):
+def q2_get_triples():
     triples = """\
         {%- if AdministeredBy.name %}
             <{{upload_url}}{{AdministeredBy.role}}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vivoweb.org/ontology/core#AdministratorRole> .
@@ -129,21 +129,18 @@ def q2_get_triples(connection, **params):
         {%- endif -%}
     """
     api_trip = """\
-    INSERT DATA {
+    INSERT DATA {{
         GRAPH <http://vitro.mannlib.cornell.edu/default/vitro-kb-2>
         {{
             {TRIPS}
         }}
-    }
+    }}
         """.format(TRIPS=triples)
     trips = Environment().from_string(api_trip)
     return trips
 
+def fill_params(connection, **params):
 
-def run(connection, **params):
-
-    if params['Grant'].n_number:
-        return
 
     params['Grant'].create_n()
     params['upload_url'] = connection.vivo_url
@@ -173,6 +170,14 @@ def run(connection, **params):
             params['Grant'].sub_grant_not_exists = False
             params['Grant'].sub_grant_id = response['results']['bindings'][0]['n_number']['value']
 
+    return params
+
+def run(connection, **params):
+    
+    if params['Grant'].n_number:
+        return
+    else:
+        params = fill_params(connection, **params)
     q1 = q1_get_triples()
     q2 = q2_get_triples()
 
