@@ -18,6 +18,7 @@ def fill_params(connection, **params):
     department_uri = {'Academic department': 'http://vivoweb.org/ontology/core#AcademicDepartment'}
     department_type = department_uri[params['Department'].dep_type]
     params['Department'].dep_type = department_type
+    return params
 
 def get_triples():
     triples = """\
