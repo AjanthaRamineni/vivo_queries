@@ -9,8 +9,7 @@ def get_params(connection):
     return params
 
 def fill_params(connection, **params):
-    if params['Organization'].n_number:
-        return
+
 
     params['upload_url'] = connection.vivo_url
 
@@ -37,7 +36,12 @@ def get_triples():
     return trips
 
 def run(connection, **params):
-    params = fill_params(connection, **params)
+    
+    if params['Organization'].n_number:
+        return
+    else:
+        params = fill_params(connection, **params)
+
     print params['upload_url']
     q = get_triples()
     print('=' * 20 + "\nCreating new organization\n" + '=' * 20)
