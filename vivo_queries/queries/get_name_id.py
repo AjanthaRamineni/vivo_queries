@@ -6,7 +6,7 @@ def get_params(connection):
     return params
 
 def fill_params(connection, **params):
-    params['subj'] = params['Author'].vcard
+    params['subj'] = connection.vivo_url + params['Author'].vcard
 
     return params
 
@@ -27,6 +27,6 @@ def run(connection, **params):
 
     #Navigate json
     finding = response.json()
-    name_id = finding['results']['bindings'][0]['name_id']['value']
+    name_id = finding['results']['bindings'][0]['name_id']['value'].split("/")[-1]
 
     return name_id
