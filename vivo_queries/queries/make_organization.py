@@ -17,7 +17,7 @@ def run(connection, **params):
     params['upload_url'] = connection.vivo_url
 
     params['Organization'].n_number = connection.gen_n()
-    params['Organization'].role = connection.gen_n()
+
     # template data into q
     q = Environment().from_string("""\
     INSERT DATA {
@@ -32,4 +32,5 @@ def run(connection, **params):
     # Send data to Vivo
     print('=' * 20 + "\nCreating new organization\n" + '=' * 20)
     response = connection.run_update(q.render(**params))
+    print response
     return response

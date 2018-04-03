@@ -52,6 +52,9 @@ def run(connection, **params):
             params['Grant'].sub_grant_not_exists = False
             params['Grant'].sub_grant_id = response['results']['bindings'][0]['n_number']['value']
 
+    if params['AdministeredBy']:
+        params['AdministeredBy'].role = connection.gen_n()
+
 
     q1 = Environment().from_string("""
         INSERT DATA {

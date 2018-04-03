@@ -2,6 +2,8 @@ from jinja2 import Environment
 
 from vivo_queries.vdos.author import Author
 from vivo_queries.vdos.contributor import Contributor
+from vivo_queries.queries.get_vcard import run as get_vcard
+from vivo_queries.queries.get_name_id import run as get_name_id
 
 
 def get_params(connection):
@@ -25,6 +27,14 @@ def run(connection, **params):
     params['Contributor'].type = contributor_role_type
     params['Contributor'].person_id = params['Author'].n_number
 
+    if not params['Author'].vcard:
+        params['Author'].vcard = get_vcard(connection, **params)
+        if not params['Author'].name_id:
+            params['Author'].name_id = get_name_id(connection, **params)
+
+    print params['Author'].vcard
+    print params['Author'].name_id
+
     # template data into q
     q = Environment().from_string("""\
         INSERT DATA {
@@ -33,8 +43,8 @@ def run(connection, **params):
                 
                 {%- if Contributor.name %}
                     <{{upload_url}}{{Author.n_number}}> <http://www.w3.org/2000/01/rdf-schema#label> "{{Contributor.name}}"^^<http://www.w3.org/2001/XMLSchema#string> .
-                    <{{upload_url}}{{Contributor.n_number}}> <http://purl.obolibrary.org/obo/ARG_2000028> <{{upload_url}}{{Author.vcard}}> .
-                    <{{upload_url}}{{Contributor.n_number}}> <http://purl.obolibrary.org/obo/RO_0000053> <{{upload_url}}{{Author.name_id}}> . 
+                    <{{upload_url}}{{Contributor.n_number}}> <http://purl.obolibrary.org/obo/ARG_2000028> <{{Author.vcard}}> .
+                    <{{upload_url}}{{Contributor.n_number}}> <http://purl.obolibrary.org/obo/RO_0000053> <{{Author.name_id}}> . 
                 {%- endif -%}
             }
         
@@ -44,4 +54,5 @@ def run(connection, **params):
     # send data to vivo
     print('=' * 20 + "\nAdding contributor\n" + '=' * 20)
     response = connection.run_update(q.render(**params))
+    print response
     return response
