@@ -25,6 +25,6 @@ def run(connection, **params):
 
     #Navigate json
     finding = response.json()
-    vcard = finding['results']['bindings'][0]['vcard']['value']
+    vcard = finding['results']['bindings'][0]['vcard']['value'].split("/")[-1]
 
     return vcard
