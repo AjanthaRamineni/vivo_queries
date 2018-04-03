@@ -2,6 +2,8 @@ from jinja2 import Environment
 
 from vivo_queries.vdos.author import Author
 from vivo_queries.vdos.contributor import Contributor
+from vivo_queries.queries.get_vcard import run as get_vcard
+from vivo_queries.queries.get_name_id import run as get_name_id
 
 
 def get_params(connection):
@@ -11,6 +13,14 @@ def get_params(connection):
     return params
 
 def fill_params(connection, **params):
+    if not params['Author'].vcard:
+        params['Author'].vcard = get_vcard(connection, **params)
+        if not params['Author'].name_id:
+            params['Author'].name_id = get_name_id(connection, **params)
+
+    print params['Author'].vcard
+    print params['Author'].name_id
+
     params['upload_url'] = connection.vivo_url
 
     params['Contributor'].n_number = connection.gen_n()
@@ -51,4 +61,5 @@ def run(connection, **params):
     # send data to vivo
     print('=' * 20 + "\nAdding contributor\n" + '=' * 20)
     response = connection.run_update(q.render(**params))
+    print response
     return response

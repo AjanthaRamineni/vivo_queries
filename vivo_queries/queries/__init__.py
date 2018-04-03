@@ -19,6 +19,7 @@ import get_journal_on_pub
 import get_label
 import get_person_list
 import get_vcard
+import get_name_id
 import get_contributor_list
 import get_department_list
 import get_grant_list

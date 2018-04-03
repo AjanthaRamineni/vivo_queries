@@ -141,9 +141,11 @@ def q2_get_triples():
 
 def fill_params(connection, **params):
 
-
     params['Grant'].create_n()
     params['upload_url'] = connection.vivo_url
+
+    if params['AdministeredBy']:
+        params['AdministeredBy'].role = connection.gen_n()
 
     # Start Date
     if params['Grant'].start_date:
@@ -173,7 +175,7 @@ def fill_params(connection, **params):
     return params
 
 def run(connection, **params):
-    
+
     if params['Grant'].n_number:
         return
     else:

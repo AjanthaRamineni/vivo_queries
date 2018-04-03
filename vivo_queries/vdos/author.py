@@ -20,6 +20,7 @@ class Author(VivoDomainObject):
         self.geographic_focus = None
         # Added
         self.vcard = None
+        self.name_id = None
         self.details = ['name', 'first', 'middle','last', 'email', 'phone', 'title']
         self.extra = ['overview', 'geographic_focus']
 
