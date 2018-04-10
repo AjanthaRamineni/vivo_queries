@@ -1,21 +1,25 @@
 from vivo_queries.vdos.author import Author
 
+
 def get_params(connection):
     author = Author(connection)
     params = {'Author': author,}
     return params
+
 
 def fill_params(connection, **params):
     params['subj'] = connection.vivo_url + params['Author'].vcard
 
     return params
 
+
 def get_query(**params):
-    print params['subj']
+    print(params['subj'])
     query = """ SELECT ?name_id WHERE {{<{}> <http://www.w3.org/2006/vcard/ns#hasName> ?name_id .}} LIMIT 1 """.format(params['subj'])
-    print query
+    print(query)
 
     return query
+
 
 def run(connection, **params):
     params = fill_params(connection, **params)

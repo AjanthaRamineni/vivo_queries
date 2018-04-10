@@ -32,6 +32,17 @@ def fill_params(connection, **params):
     else:
         params['identity'] = 'http://www.w3.org/2002/07/owl#Thing'
 
+
+    #Escape special characters
+    params['Thing'].extra = params['Thing'].extra.replace('(', '\\\(')
+    params['Thing'].extra = params['Thing'].extra.replace(')', '\\\)')
+    params['Thing'].extra = params['Thing'].extra.replace('[', '\\\[')
+    params['Thing'].extra = params['Thing'].extra.replace('+', '\\\+')
+    
+    #Workaround for escaping parentheses
+    # params['Thing'].extra = params['Thing'].extra.replace('(', '[(]')
+    # params['Thing'].extra = params['Thing'].extra.replace(')', '[)]')
+
     return params
 
 def get_query(**params):
@@ -39,7 +50,8 @@ def get_query(**params):
         query = """SELECT ?uri ?label WHERE {{?uri <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <{}> . ?uri <http://www.w3.org/2000/01/rdf-schema#label> ?label . FILTER (regex (?label, "{}", "i")) }}""".format(params['identity'], params['Thing'].extra)
     except UnicodeEncodeError as e:
         print(e)
-        print('Error in: ' + params['Thing'].extra)
+        print('Error in: ')
+        print(params['Thing'].extra)
         exit()
 
     return query
@@ -52,6 +64,7 @@ def run(connection, **params):
     response = connection.run_query(q)
 
     lookup = response.json()
+
     matches = {}
     for listing in lookup['results']['bindings']:
         name = parse_json(listing, 'label')

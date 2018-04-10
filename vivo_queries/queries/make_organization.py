@@ -41,9 +41,9 @@ def run(connection, **params):
     else:
         params = fill_params(connection, **params)
 
-    print params['upload_url']
+    print(params['upload_url'])
     q = get_triples()
     print('=' * 20 + "\nCreating new organization\n" + '=' * 20)
     response = connection.run_update(q.render(**params))
-    print response
+    print(response)
     return response

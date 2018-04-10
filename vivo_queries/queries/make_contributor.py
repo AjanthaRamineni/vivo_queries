@@ -12,14 +12,15 @@ def get_params(connection):
     params = {'Contributor': contributor, 'Author': author}
     return params
 
+
 def fill_params(connection, **params):
     if not params['Author'].vcard:
-        params['Author'].vcard = get_vcard(connection, **params)
+        params['Author'].vcard = get_vcard(connection, **params).split("/")[-1]
         if not params['Author'].name_id:
             params['Author'].name_id = get_name_id(connection, **params)
 
-    print params['Author'].vcard
-    print params['Author'].name_id
+    print(params['Author'].vcard)
+    print(params['Author'].name_id)
 
     params['upload_url'] = connection.vivo_url
 
@@ -34,6 +35,7 @@ def fill_params(connection, **params):
     params['Contributor'].person_id = params['Author'].n_number
 
     return params
+
 
 def get_triples():
     triples = """\
@@ -55,11 +57,12 @@ def get_triples():
     trips = Environment().from_string(api_trip)
     return trips
 
+
 def run(connection, **params):
     params = fill_params(connection, **params)
     q = get_triples()
     # send data to vivo
     print('=' * 20 + "\nAdding contributor\n" + '=' * 20)
     response = connection.run_update(q.render(**params))
-    print response
+    print(response)
     return response

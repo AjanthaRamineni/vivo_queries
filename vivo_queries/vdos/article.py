@@ -1,4 +1,4 @@
-from VDO import VivoDomainObject
+from vivo_queries.vdos.VDO import VivoDomainObject
 
 class Article(VivoDomainObject):
     def __init__(self, connection):
@@ -14,9 +14,10 @@ class Article(VivoDomainObject):
         self.end_page = None
         self.publication_year = None
         self.doi = None
-        self.pubmed_id = None
+        self.pmid = None
+        # self.details = ['volume', 'issue', 'start_page', 'end_page', 'publication_year', 'doi', 'pmid']
         self.details = ['name', 'type', 'volume', 'issue', 'start_page', 'end_page', 'publication_year', 'doi', 'pubmed_id']
-        # self.details = ['volume', 'issue', 'start_page', 'end_page', 'publication_year', 'doi', 'pubmed_id']
+
 
     def lookup(self, connection):
         params = {'Article': self}
@@ -28,4 +29,4 @@ class Article(VivoDomainObject):
         self.end_page = info['end page']
         self.publication_year = info['year']
         self.doi = info['doi']
-        self.pubmed_id = info['pmid']
+        self.pmid = info['pmid']

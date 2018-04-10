@@ -8,6 +8,7 @@ def get_params(connection):
     params = {'Department': department}
     return params
 
+
 def fill_params(connection, **params):
     if params['Department'].n_number:
         return
@@ -19,6 +20,7 @@ def fill_params(connection, **params):
     department_type = department_uri[params['Department'].dep_type]
     params['Department'].dep_type = department_type
     return params
+
 
 def get_triples():
     triples = """\
@@ -37,6 +39,7 @@ def get_triples():
         """.format(TRIPS=triples)
     trips = Environment().from_string(api_trip)
     return trips
+
 
 def run(connection, **params):
 

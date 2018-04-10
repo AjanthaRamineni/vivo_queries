@@ -2,11 +2,13 @@ def get_params(connection):
     params = {}
     return params
 
+
 def get_triples():
     q = """ SELECT ?label ?u
         WHERE { ?u <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Organization> . ?u <http://www.w3.org/2000/01/rdf-schema#label> ?label . }
         """
     return q
+
 
 def run(connection, **params):
     q = get_triples()

@@ -65,8 +65,8 @@ def get_triples(api):
 <{{upload_url}}{{Article.n_number}}> <http://purl.org/ontology/bibo/doi> "{{ Article.doi }}"^^<http://www.w3.org/2001/XMLSchema#string> .
 {%- endif -%}
 
-{%- if Article.pubmed_id %}
-<{{upload_url}}{{Article.n_number}}> <http://purl.org/ontology/bibo/pmid> "{{ Article.pubmed_id }}"^^<http://www.w3.org/2001/XMLSchema#string> .
+{%- if Article.pmid %}
+<{{upload_url}}{{Article.n_number}}> <http://purl.org/ontology/bibo/pmid> "{{ Article.pmid }}"^^<http://www.w3.org/2001/XMLSchema#string> .
 {%- endif -%}
   
 {%- if Author.n_number %}
@@ -104,7 +104,7 @@ def run(connection, **params):
     params = fill_params(connection, **params)
     q = get_triples(True)
 
-    print('=' * 20 + "\nAdding letter with pre-existing author\n" + '=' * 20)
+    print('=' * 20 + "\nAdding letter\n" + '=' * 20)
     response = connection.run_update(q.render(**params))
     return response
 

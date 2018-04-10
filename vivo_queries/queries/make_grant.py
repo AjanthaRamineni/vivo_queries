@@ -185,7 +185,7 @@ def run(connection, **params):
 
     print('=' * 20 + "\nCreating new grant\n" + '=' * 20)
     response = connection.run_update(q1.render(**params))
-    print response
+    print(response)
     response = connection.run_update(q2.render(**params))
-    print response
+    print(response)
     return response
