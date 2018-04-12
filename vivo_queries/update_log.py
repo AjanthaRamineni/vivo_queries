@@ -57,4 +57,8 @@ class UpdateLog(object):
                     for person in self.authors:
                         msg.write(person[0] + '   ---   ' + person[1] + '\n')
 
+<<<<<<< HEAD
         return created
+=======
+        return created
+>>>>>>> cc4341bd8c50b6d4f1c0d22084af3b520a24b7db
